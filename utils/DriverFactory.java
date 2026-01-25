@@ -3,14 +3,12 @@ package utils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.net.URL;
+import java.io.File;
 
 public class DriverFactory {
 
-    // Создаём драйвер согласно браузеру
-
+    // Создаём драйвер браузеру
     public static WebDriver createDriver() {
         switch (TestConfiguration.getBrowserType()) {
             case CHROME:
@@ -22,15 +20,19 @@ public class DriverFactory {
         }
     }
 
+    // Создание драйвера для Chrome
     private static WebDriver createChromeDriver() {
-        System.setProperty("webdriver.chrome.driver", "/path/to/chromedriver"); // укажите путь к вашему chromedriver
+        File chromedriverFile = new File("src/main/resources/webdrivers/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", chromedriverFile.getAbsolutePath());
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized");
         return new ChromeDriver(options);
     }
 
+    // Создание драйвера для Яндекс.Браузера
     private static WebDriver createYandexDriver() {
-        System.setProperty("webdriver.chrome.driver", "/path/to/yanderexdriver"); // укажите путь к вашему yanderexdriver
+        File yandexdriverFile = new File("src/main/resources/webdrivers/yandexdriver.exe");
+        System.setProperty("webdriver.chrome.driver", yandexdriverFile.getAbsolutePath());
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized");
         return new ChromeDriver(options);
