@@ -59,17 +59,17 @@ public class RegistrationPage {
         click(REGISTER_BUTTON);
     }
 
-    // Нажатие на кнопку "Зарегистрироваться"
+    // Клик на кнопку Зарегистрироваться
     public void clickRegisterButton() {
         click(REGISTER_BUTTON);
     }
 
-    // Получение текста ошибки для поля "Пароль"
+    // Получение текста ошибки для поля Пароль
     public String getPasswordErrorMessage() {
         return driver.findElement(ERROR_PASSWORD).getText();
     }
 
-    // Переход по ссылке "Войти"
+    // Переход по ссылке Войти
     public void clickAlreadyRegisteredLink() {
         click(ALREADY_REGISTERED_LOGIN_LINK);
     }

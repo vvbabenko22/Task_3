@@ -42,7 +42,7 @@ public class AuthorizationPage {
         driver.findElement(PASSWORD_INPUT).sendKeys(password);
     }
 
-    // Нажатие на кнопку Вход
+    // Клик на кнопку Вход
     public void login() {
         scrollToElement(LOGIN_BUTTON);
         driver.findElement(LOGIN_BUTTON).click();
@@ -65,5 +65,9 @@ public class AuthorizationPage {
         enterEmail(email);
         enterPassword(password);
         login();
+    }
+
+    public void navigateToLoginPage() {
+
     }
 }

@@ -27,31 +27,31 @@ public class MainPage {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
     }
 
-    // Метод для нажатия на кнопку "Войти в аккаунт"
+    // Метод для клика на кнопку Войти в аккаунт
     public void clickEnterAccountButton() {
         scrollToElement(ENTER_ACCOUNT_BUTTON);
         driver.findElement(ENTER_ACCOUNT_BUTTON).click();
     }
 
-    // Метод для нажатия на кнопку "Личный кабинет"
+    // Метод для клика на клика Личный кабинет
     public void clickPersonalAccountButton() {
         scrollToElement(PERSONAL_ACCOUNT_BUTTON);
         driver.findElement(PERSONAL_ACCOUNT_BUTTON).click();
     }
 
-    // Метод для перехода на вкладку "Булки"
+    // Метод для перехода на вкладку Булки
     public void clickBunsTab() {
         scrollToElement(BUNS_TAB);
         driver.findElement(BUNS_TAB).click();
     }
 
-    // Метод для перехода на вкладку "Соусы"
+    // Метод для перехода на вкладку Соусы
     public void clickSaucesTab() {
         scrollToElement(SAUCES_TAB);
         driver.findElement(SAUCES_TAB).click();
     }
 
-    // Метод для перехода на вкладку "Начинки"
+    // Метод для перехода на вкладку Начинки
     public void clickFillingsTab() {
         scrollToElement(FILLINGS_TAB);
         driver.findElement(FILLINGS_TAB).click();
@@ -94,5 +94,14 @@ public class MainPage {
 
     public void clickFillingsAndWaitActive() throws InterruptedException {
         clickTabAndWaitActive(FILLINGS_TAB);
+    }
+
+    public void waitForCheckoutButton() {
+    }
+
+    public void getCheckoutButton() {
+    }
+
+    public void isLoggedIn() {
     }
 }

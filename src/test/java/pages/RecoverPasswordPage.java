@@ -23,7 +23,7 @@ public class RecoverPasswordPage {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
     }
 
-    // Нажимает на элемент
+    // Клик на элемент
     protected void click(By locator) {
         scrollToElement(locator);
         driver.findElement(locator).click();
