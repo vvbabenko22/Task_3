@@ -7,8 +7,6 @@ public class DriverManager {
 
     private static volatile WebDriver webDriver;
 
-    private DriverManager() {}
-
     // Получаем экземпляр драйвера
 
     public static synchronized WebDriver getDriver() {

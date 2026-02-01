@@ -1,9 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 public class ProfilePage {
 
@@ -18,29 +16,4 @@ public class ProfilePage {
         this.driver = driver;
     }
 
-    // Прокручивает элемент в центр окна браузера
-    protected void scrollToElement(By by) {
-        WebElement element = driver.findElement(by);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
-    }
-
-    // Возвращает значение атрибута input
-    private String getInputValue(By locator) {
-        return driver.findElement(locator).getAttribute("value");
-    }
-
-    // Метод ожидания появления текста на странице профиля
-    public void waitProfilePageLoad() {
-        scrollToElement(PROFILE_TEXT);
-    }
-
-    // Получить значение поля имени
-    public String getNameText() {
-        return getInputValue(NAME_INPUT);
-    }
-
-    // Получить значение поля электронной почты
-    public String getEmailText() {
-        return getInputValue(EMAIL_INPUT);
-    }
 }

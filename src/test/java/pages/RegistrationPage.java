@@ -16,7 +16,7 @@ public class RegistrationPage {
     public static final By INPUT_PASSWORD = By.xpath(".//fieldset[3]//input");
     public static final By REGISTER_BUTTON = By.xpath(".//button[text()='Зарегистрироваться']");
     public static final By ERROR_PASSWORD = By.xpath(".//fieldset[3]//p");
-    public static final By ALREADY_REGISTERED_LOGIN_LINK = By.xpath(".//*[text()='Уже зарегистрированы?']/a");
+    public static By LOGIN_LINK_BACK = By.xpath(".//*[text()='Войти']");
 
     public RegistrationPage(WebDriver driver) {
         this.driver = driver;
@@ -41,11 +41,6 @@ public class RegistrationPage {
         field.sendKeys(value);
     }
 
-    // Ожидание загрузки страницы регистрации
-    public void waitForPageLoad() {
-        scrollToElement(REGISTER_FORM_HEADING);
-    }
-
     // Заполнение формы регистрации
     public void inputRegistrationForm(String name, String email, String password) {
         fillField(INPUT_NAME, name);
@@ -59,11 +54,6 @@ public class RegistrationPage {
         click(REGISTER_BUTTON);
     }
 
-    // Клик на кнопку Зарегистрироваться
-    public void clickRegisterButton() {
-        click(REGISTER_BUTTON);
-    }
-
     // Получение текста ошибки для поля Пароль
     public String getPasswordErrorMessage() {
         return driver.findElement(ERROR_PASSWORD).getText();
@@ -71,6 +61,6 @@ public class RegistrationPage {
 
     // Переход по ссылке Войти
     public void clickAlreadyRegisteredLink() {
-        click(ALREADY_REGISTERED_LOGIN_LINK);
+        click(LOGIN_LINK_BACK);
     }
 }

@@ -1,8 +1,8 @@
 package pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class AuthorizationPage {
@@ -13,8 +13,8 @@ public class AuthorizationPage {
     public static final By EMAIL_INPUT = By.xpath(".//label[text()='Email']/../input");
     public static final By PASSWORD_INPUT = By.xpath(".//label[text()='Пароль']/../input");
     public static final By LOGIN_BUTTON = By.xpath(".//button[text()='Войти']");
-    public static final By REGISTER_LINK = By.className("Auth_link__1fOlj");
-    public static final By FORGOT_PASSWORD_LINK = By.xpath(".//a[text()='Восстановить пароль']");
+    public static final By REGISTER_LINK = By.xpath("(.//*[@class='Auth_link__1fOlj'])[1]");
+    public static final By FORGOT_PASSWORD_LINK = By.xpath("(.//*[@class='Auth_link__1fOlj'])[2]");
 
     public AuthorizationPage(WebDriver driver) {
         this.driver = driver;
@@ -26,7 +26,7 @@ public class AuthorizationPage {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
     }
 
-    // Методы для действий над элементами
+    // Методы для работы с формой авторизации
 
     // Ввод Email
     public void enterEmail(String email) {
@@ -48,16 +48,16 @@ public class AuthorizationPage {
         driver.findElement(LOGIN_BUTTON).click();
     }
 
-    // Клик по ссылке Зарегистрироваться
-    public void register() {
-        scrollToElement(REGISTER_LINK);
-        driver.findElement(REGISTER_LINK).click();
-    }
-
     // Клик по ссылке Восстановить пароль
     public void forgotPassword() {
         scrollToElement(FORGOT_PASSWORD_LINK);
         driver.findElement(FORGOT_PASSWORD_LINK).click();
+    }
+
+    // Переход на форму авторизации после восстановления пароля
+    public void rememberPassword() {
+        scrollToElement(RecoverPasswordPage.REMEMBER_PASSWORD_LINK);
+        driver.findElement(RecoverPasswordPage.REMEMBER_PASSWORD_LINK).click();
     }
 
     // Заполнить и отправить данные авторизации
@@ -67,7 +67,7 @@ public class AuthorizationPage {
         login();
     }
 
-    public void navigateToLoginPage() {
+    public void clickRegisterLink() {
 
     }
 }

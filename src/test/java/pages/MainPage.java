@@ -4,18 +4,21 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 
 public class MainPage {
 
-    private final WebDriver driver;
+    private WebDriver driver;
 
     // Локаторы элементов
-    public static final By ENTER_ACCOUNT_BUTTON = By.xpath(".//button[text()='Войти в аккаунт']");
-    public static final By PERSONAL_ACCOUNT_BUTTON = By.xpath(".//p[contains(@class, 'AppHeader_header__linkText') and contains(@class, 'ml-2') and text()='Личный Кабинет']");
-    public static final By CHECKOUT_BUTTON = By.xpath(".//button[text()='Оформить заказ']");
-    public static final By BUNS_TAB = By.xpath(".//span[text()='Булки']/parent::div");
-    public static final By SAUCES_TAB = By.xpath(".//span[text()='Соусы']/parent::div");
-    public static final By FILLINGS_TAB = By.xpath(".//*[text()='Начинки']/parent::div");
+    public static final By ENTER_ACCOUNT_BUTTON = By.xpath("//button[contains(@class, 'button_button__33qZ0') and text()='Войти в аккаунт']");
+    public static final By PERSONAL_ACCOUNT_BUTTON = By.xpath("//p[contains(@class, 'AppHeader_header__linkText__3q_va') and normalize-space()='Личный Кабинет']");
+    public static final By CHECKOUT_BUTTON = By.xpath("//button[.='Оформить заказ']");
+    public static final By BUNS_TAB = By.xpath("//span[text()='Булки']/ancestor::div[contains(@class,'constructor')]/*[contains(@class,'tab')][1]");
+    public static final By SAUCES_TAB = By.xpath("//span[text()='Соусы']/ancestor::div[contains(@class,'constructor')]/*[contains(@class,'tab')][2]");
+    public static final By FILLINGS_TAB = By.xpath("//span[text()='Начинки']/ancestor::div[contains(@class,'constructor')]/*[contains(@class,'tab')][3]");
 
     public MainPage(WebDriver driver) {
         this.driver = driver;
@@ -33,7 +36,7 @@ public class MainPage {
         driver.findElement(ENTER_ACCOUNT_BUTTON).click();
     }
 
-    // Метод для клика на клика Личный кабинет
+    // Метод для клика на кнопку Личный кабинет
     public void clickPersonalAccountButton() {
         scrollToElement(PERSONAL_ACCOUNT_BUTTON);
         driver.findElement(PERSONAL_ACCOUNT_BUTTON).click();
@@ -83,25 +86,15 @@ public class MainPage {
         }
     }
 
-    // Простые варианты для кликов с ожиданием активации
-    public void clickBunsAndWaitActive() throws InterruptedException {
-        clickTabAndWaitActive(BUNS_TAB);
-    }
-
-    public void clickSaucesAndWaitActive() throws InterruptedException {
-        clickTabAndWaitActive(SAUCES_TAB);
-    }
-
-    public void clickFillingsAndWaitActive() throws InterruptedException {
-        clickTabAndWaitActive(FILLINGS_TAB);
-    }
-
+    // Ожидание кнопки "Оформить заказ"
     public void waitForCheckoutButton() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(CHECKOUT_BUTTON));
     }
 
-    public void getCheckoutButton() {
+    // Возвращает кнопку "Оформить заказ"
+    public WebElement getCheckoutButton() {
+        return driver.findElement(CHECKOUT_BUTTON);
     }
 
-    public void isLoggedIn() {
-    }
 }
