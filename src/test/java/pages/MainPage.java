@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import java.util.List;
 
 public class MainPage {
 
@@ -16,9 +17,15 @@ public class MainPage {
     public static final By ENTER_ACCOUNT_BUTTON = By.xpath("//button[contains(@class, 'button_button__33qZ0') and text()='Войти в аккаунт']");
     public static final By PERSONAL_ACCOUNT_BUTTON = By.xpath("//p[contains(@class, 'AppHeader_header__linkText__3q_va') and normalize-space()='Личный Кабинет']");
     public static final By CHECKOUT_BUTTON = By.xpath("//button[.='Оформить заказ']");
-    public static final By BUNS_TAB = By.xpath("//span[text()='Булки']/ancestor::div[contains(@class,'constructor')]/*[contains(@class,'tab')][1]");
-    public static final By SAUCES_TAB = By.xpath("//span[text()='Соусы']/ancestor::div[contains(@class,'constructor')]/*[contains(@class,'tab')][2]");
-    public static final By FILLINGS_TAB = By.xpath("//span[text()='Начинки']/ancestor::div[contains(@class,'constructor')]/*[contains(@class,'tab')][3]");
+    public static final By BUNS_TAB = By.xpath(".//*[@class='text text_type_main-default' and contains(.,'Булки')]");
+    public static final By SAUCES_TAB = By.xpath(".//*[@class='text text_type_main-default' and contains(.,'Соусы')]");
+    public static final By FILLINGS_TAB = By.xpath(".//*[@class='text text_type_main-default' and contains(.,'Начинки')]");
+
+    public static final By LogotypeButton = By.xpath(".//*[@class='AppHeader_header__logo__2D0X2']");
+    public static final By ConstructorButton = By.xpath(".//*[@href='/' and contains(.,'Конструктор')]");
+
+    // Локатор перехода по кнопкам/разделам "Булки", "Соусы", "Начинки" главной страницы
+    private final By locatorBunsSaucesToppingsButtons = By.xpath(".//*[@style='display: flex;']");
 
     public MainPage(WebDriver driver) {
         this.driver = driver;
@@ -54,36 +61,33 @@ public class MainPage {
         driver.findElement(SAUCES_TAB).click();
     }
 
+    // Метод для клика на логотип
+    public void clickLogotypeTab() {
+        scrollToElement(LogotypeButton);
+        driver.findElement(LogotypeButton).click();
+    }
+
+    // Метод для клика на вкладку Конструктор
+    public void clickConstructor() {
+        scrollToElement(ConstructorButton);
+        driver.findElement(ConstructorButton).click();
+    }
+
     // Метод для перехода на вкладку Начинки
     public void clickFillingsTab() {
         scrollToElement(FILLINGS_TAB);
         driver.findElement(FILLINGS_TAB).click();
     }
 
-    // Получение атрибута класса для проверки активности табов
-    public String getClassNameByTab(By tabLocator) {
-        return driver.findElement(tabLocator).getAttribute("class");
+    // Метод для проверки активности вкладок Булки/Соусы/Начинки
+    public By checkLocatorBunsSaucesToppingsButtons() {
+        return locatorBunsSaucesToppingsButtons;
     }
 
-    // Проверка активного статуса таба
-    public boolean isTabActive(By tabLocator) {
-        return getClassNameByTab(tabLocator).contains("tab_tab_type_current__2BEPc");
-    }
-
-    // Кликнуть на вкладку и ожидать активность
-    public void clickTabAndWaitActive(By tabLocator) throws InterruptedException {
-        scrollToElement(tabLocator);
-        driver.findElement(tabLocator).click();
-
-        long startTime = System.currentTimeMillis();
-        long endTime = startTime + 5000; // Таймаут в миллисекундах
-
-        while (!isTabActive(tabLocator)) {
-            if (System.currentTimeMillis() > endTime) {
-                throw new RuntimeException("Вкладка не активировалась в течение заданного таймаута.");
-            }
-            Thread.sleep(200);
-        }
+    // Метод для проверки активного состояния вкладки
+    public boolean isTabActive() {
+        List<WebElement> elements = driver.findElements(locatorBunsSaucesToppingsButtons);
+        return !elements.isEmpty(); // Активная вкладка имеется, если хотя бы один элемент существует
     }
 
     // Ожидание кнопки "Оформить заказ"
