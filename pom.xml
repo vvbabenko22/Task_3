@@ -14,7 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Версии зависимостей -->
-        <junit.jupiter.version>5.9.2</junit.jupiter.version>
+        <junit.jupiter.version>5.10.2</junit.jupiter.version>
         <selenium.version>4.10.0</selenium.version>
         <allure.version>2.22.0</allure.version>
         <faker.version>1.14.0</faker.version>
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>${junit.jupiter.version}</version>
+            <version>5.10.2</version>
             <scope>test</scope>
         </dependency>
 

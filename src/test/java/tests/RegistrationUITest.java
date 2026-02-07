@@ -144,6 +144,6 @@ public class RegistrationUITest {
 
     @AfterEach
     public void tearDown() {
-        DriverManager.quitDriver();
+        DriverManager.quitDriver(); // Закрываем браузер
     }
 }

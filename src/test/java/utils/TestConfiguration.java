@@ -1,7 +1,7 @@
 package utils;
 
 public class TestConfiguration {
-    private static BrowserType browserType = BrowserType.YANDEX_BROWSER; // По умолчанию используем Chrome
+    private static BrowserType browserType = BrowserType.YANDEX_BROWSER; // По умолчанию используем Яндекс
     public static BrowserType getBrowserType() {
         return browserType;
     }
