@@ -10,7 +10,7 @@ public class ProfilePage {
 
     private final WebDriver driver;
 
-    // Улучшенный локатор кнопки "Выход"
+    // Локатор кнопки "Выход"
     private final By locatorExitButton = By.xpath("//button[normalize-space(text())='Выход']");
 
     // Метод для выхода из Личного кабинета

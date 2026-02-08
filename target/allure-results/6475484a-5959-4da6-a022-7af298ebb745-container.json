@@ -1,0 +1,1 @@
+{"uuid":"6475484a-5959-4da6-a022-7af298ebb745","name":"UI-тест авторизации через кнопку 'Войти в аккаунт' в Chrome","children":["ad38f5f7-d0f7-421b-bff6-3b683df4db77"],"befores":[],"afters":[{"name":"tearDown","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1770540108604,"stop":1770540109873}],"start":1770540105749,"stop":1770540109875}

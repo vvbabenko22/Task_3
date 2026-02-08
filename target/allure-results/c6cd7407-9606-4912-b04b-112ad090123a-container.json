@@ -1,0 +1,1 @@
+{"uuid":"c6cd7407-9606-4912-b04b-112ad090123a","name":"UI-тест авторизации через восстановление пароля в Chrome","children":["a11e6fae-3df5-4e87-8e26-98ad3d6041b3"],"befores":[],"afters":[{"name":"tearDown","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1770541351101,"stop":1770541352361}],"start":1770541347847,"stop":1770541352364}

@@ -66,7 +66,11 @@ public class AuthorizationPage {
         login();
     }
 
+    // Переход на форму регистрации
     public void clickRegisterLink() {
 
+    }
+
+    public void clickLoginLinkBack() {
     }
 }

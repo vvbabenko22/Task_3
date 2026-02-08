@@ -1,0 +1,1 @@
+{"uuid":"110a9814-7c31-4b98-b528-679b15e424cd","name":"UI-тест авторизации через кнопку 'Личный кабинет' в Chrome","children":["3875c224-3598-47ec-b2f0-db07e6ddcaad"],"befores":[],"afters":[{"name":"tearDown","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1770538489586,"stop":1770538490789}],"start":1770538478981,"stop":1770538490793}
