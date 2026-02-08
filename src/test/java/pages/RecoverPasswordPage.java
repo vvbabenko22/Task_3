@@ -12,8 +12,8 @@ public class RecoverPasswordPage {
     private final WebDriver driver;
 
     // Локаторы элементов
-    public static final By RESTORE_FORM_HEAD = By.xpath(".//*[text()='Восстановление пароля']");
-    public static final By REMEMBER_PASSWORD_LINK = By.xpath(".//a[text()='Войти']");
+    public static final By RestorePassword = By.xpath(".//*[text()='Восстановление пароля']");
+    public static final By RememberPassword = By.xpath(".//a[text()='Войти']");
 
     public RecoverPasswordPage(WebDriver driver) {
         this.driver = driver;
@@ -22,7 +22,7 @@ public class RecoverPasswordPage {
     // Ожидание загрузки страницы восстановления пароля
     public void waitForPageLoad() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.presenceOfElementLocated(RESTORE_FORM_HEAD));
+        wait.until(ExpectedConditions.presenceOfElementLocated(RestorePassword));
     }
 
 }

@@ -104,14 +104,14 @@ class MultiLoginUITest {
 
         // Шаг 2: Переход на главную страницу и открытие страницы авторизации
         WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.ENTER_ACCOUNT_BUTTON));
+        wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.EnterAccountButton));
         mainPage.clickEnterAccountButton();
 
         // Шаг 3: Авторизация пользователя через UI
         authPage.submitLoginData(email, password);
 
         // Шаг 4: Проверка успешной авторизации (наличие кнопки 'Оформить заказ')
-        wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CHECKOUT_BUTTON));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
         assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
     }
 
@@ -127,14 +127,14 @@ class MultiLoginUITest {
 
         // Шаг 2: Переход на главную страницу и открытие страницы авторизации
         WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.ENTER_ACCOUNT_BUTTON));
+        wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.EnterAccountButton));
         mainPage.clickEnterAccountButton();
 
         // Шаг 3: Авторизация пользователя через UI
         authPage.submitLoginData(email, password);
 
         // Шаг 4: Проверка успешной авторизации (наличие кнопки 'Оформить заказ')
-        wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CHECKOUT_BUTTON));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
         assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
     }
 
@@ -150,14 +150,14 @@ class MultiLoginUITest {
 
         // Шаг 2: Переход на главную страницу и открытие страницы авторизации через личный кабинет
         WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.PERSONAL_ACCOUNT_BUTTON));
+        wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.PersonalAccountButton));
         mainPage.clickPersonalAccountButton();
 
         // Шаг 3: Авторизация пользователя через UI
         authPage.submitLoginData(email, password);
 
         // Шаг 4: Проверка успешной авторизации (наличие кнопки 'Оформить заказ')
-        wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CHECKOUT_BUTTON));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
         assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
     }
 
@@ -173,14 +173,14 @@ class MultiLoginUITest {
 
         // Шаг 2: Переход на главную страницу и открытие страницы авторизации через личный кабинет
         WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.PERSONAL_ACCOUNT_BUTTON));
+        wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.PersonalAccountButton));
         mainPage.clickPersonalAccountButton();
 
         // Шаг 3: Авторизация пользователя через UI
         authPage.submitLoginData(email, password);
 
         // Шаг 4: Проверка успешной авторизации (наличие кнопки 'Оформить заказ')
-        wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CHECKOUT_BUTTON));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
         assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
     }
 
@@ -197,23 +197,23 @@ class MultiLoginUITest {
         // Шаг 2: Переход на главную страницу и нажатие на кнопку 'Войти в аккаунт'
         WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(30));
         wait.until(ExpectedConditions.jsReturnsValue("return document.readyState === 'complete';"));
-        wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.ENTER_ACCOUNT_BUTTON));
+        wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.EnterAccountButton));
         mainPage.clickEnterAccountButton();
 
         // Шаг 3: Переход на страницу регистрации
-        wait.until(ExpectedConditions.presenceOfElementLocated(AuthorizationPage.REGISTER_LINK));
+        wait.until(ExpectedConditions.presenceOfElementLocated(AuthorizationPage.RegisterLink));
         authPage.clickRegisterLink();
 
         // Шаг 4: Возвращаемся на форму авторизации
-        wait.until(ExpectedConditions.presenceOfElementLocated(RegistrationPage.LOGIN_LINK_BACK));
+        wait.until(ExpectedConditions.presenceOfElementLocated(RegistrationPage.LoginLinkBack));
         regPage.clickAlreadyRegisteredLink();
 
         // Шаг 5: Авторизация пользователя через UI
-        wait.until(ExpectedConditions.elementToBeClickable(AuthorizationPage.LOGIN_BUTTON));
+        wait.until(ExpectedConditions.elementToBeClickable(AuthorizationPage.LoginButton));
         authPage.submitLoginData(email, password);
 
         // Шаг 6: Проверка успешной авторизации (появление кнопки "Оформить заказ")
-        wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CHECKOUT_BUTTON));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
         assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
     }
 
@@ -230,23 +230,23 @@ class MultiLoginUITest {
         // Шаг 2: Переход на главную страницу и нажатие на кнопку 'Войти в аккаунт'
         WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(30));
         wait.until(ExpectedConditions.jsReturnsValue("return document.readyState === 'complete';"));
-        wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.ENTER_ACCOUNT_BUTTON));
+        wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.EnterAccountButton));
         mainPage.clickEnterAccountButton();
 
         // Шаг 3: Переход на страницу регистрации
-        wait.until(ExpectedConditions.presenceOfElementLocated(AuthorizationPage.REGISTER_LINK));
+        wait.until(ExpectedConditions.presenceOfElementLocated(AuthorizationPage.RegisterLink));
         authPage.clickRegisterLink();
 
         // Шаг 4: Возвращаемся на форму авторизации
-        wait.until(ExpectedConditions.presenceOfElementLocated(RegistrationPage.LOGIN_LINK_BACK));
+        wait.until(ExpectedConditions.presenceOfElementLocated(RegistrationPage.LoginLinkBack));
         regPage.clickAlreadyRegisteredLink();
 
         // Шаг 5: Авторизация пользователя через UI
-        wait.until(ExpectedConditions.elementToBeClickable(AuthorizationPage.LOGIN_BUTTON));
+        wait.until(ExpectedConditions.elementToBeClickable(AuthorizationPage.LoginButton));
         authPage.submitLoginData(email, password);
 
         // Шаг 6: Проверка успешной авторизации (появление кнопки "Оформить заказ")
-        wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CHECKOUT_BUTTON));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
         assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
     }
 
@@ -262,11 +262,11 @@ class MultiLoginUITest {
 
         // Шаг 2: Переход на главную страницу и нажатие на кнопку 'Войти в аккаунт'
         WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(30));
-        wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.ENTER_ACCOUNT_BUTTON));
+        wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.EnterAccountButton));
         mainPage.clickEnterAccountButton();
 
         // Шаг 3: Нажатие на ссылку 'Восстановить пароль'
-        wait.until(ExpectedConditions.presenceOfElementLocated(AuthorizationPage.FORGOT_PASSWORD_LINK));
+        wait.until(ExpectedConditions.presenceOfElementLocated(AuthorizationPage.ForgotPasswordLink));
         authPage.forgotPassword();
 
         // Шаг 4: Ожидание загрузки страницы восстановления пароля
@@ -274,15 +274,15 @@ class MultiLoginUITest {
         recoverPasswordPage.waitForPageLoad();
 
         // Шаг 5: Возвращаемся на форму авторизации
-        wait.until(ExpectedConditions.presenceOfElementLocated(RecoverPasswordPage.REMEMBER_PASSWORD_LINK));
+        wait.until(ExpectedConditions.presenceOfElementLocated(RecoverPasswordPage.RememberPassword));
         authPage.rememberPassword();
 
         // Шаг 6: Авторизация пользователя через UI
-        wait.until(ExpectedConditions.elementToBeClickable(AuthorizationPage.LOGIN_BUTTON));
+        wait.until(ExpectedConditions.elementToBeClickable(AuthorizationPage.LoginButton));
         authPage.submitLoginData(email, password);
 
         // Шаг 7: Проверка успешной авторизации (появление кнопки "Оформить заказ")
-        wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CHECKOUT_BUTTON));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
         assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
     }
 
@@ -298,11 +298,11 @@ class MultiLoginUITest {
 
         // Шаг 2: Переход на главную страницу и нажатие на кнопку 'Войти в аккаунт'
         WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(30));
-        wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.ENTER_ACCOUNT_BUTTON));
+        wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.EnterAccountButton));
         mainPage.clickEnterAccountButton();
 
         // Шаг 3: Нажатие на ссылку 'Восстановить пароль'
-        wait.until(ExpectedConditions.presenceOfElementLocated(AuthorizationPage.FORGOT_PASSWORD_LINK));
+        wait.until(ExpectedConditions.presenceOfElementLocated(AuthorizationPage.ForgotPasswordLink));
         authPage.forgotPassword();
 
         // Шаг 4: Ожидание загрузки страницы восстановления пароля
@@ -310,15 +310,15 @@ class MultiLoginUITest {
         recoverPasswordPage.waitForPageLoad();
 
         // Шаг 5: Возвращаемся на форму авторизации
-        wait.until(ExpectedConditions.presenceOfElementLocated(RecoverPasswordPage.REMEMBER_PASSWORD_LINK));
+        wait.until(ExpectedConditions.presenceOfElementLocated(RecoverPasswordPage.RememberPassword));
         authPage.rememberPassword();
 
         // Шаг 6: Авторизация пользователя через UI
-        wait.until(ExpectedConditions.elementToBeClickable(AuthorizationPage.LOGIN_BUTTON));
+        wait.until(ExpectedConditions.elementToBeClickable(AuthorizationPage.LoginButton));
         authPage.submitLoginData(email, password);
 
         // Шаг 7: Проверка успешной авторизации (появление кнопки "Оформить заказ")
-        wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CHECKOUT_BUTTON));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
         assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
     }
 

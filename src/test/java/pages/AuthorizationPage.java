@@ -10,11 +10,11 @@ public class AuthorizationPage {
     private final WebDriver driver;
 
     // Локаторы элементов
-    public static final By EMAIL_INPUT = By.xpath(".//label[text()='Email']/../input");
-    public static final By PASSWORD_INPUT = By.xpath(".//label[text()='Пароль']/../input");
-    public static final By LOGIN_BUTTON = By.xpath(".//button[text()='Войти']");
-    public static final By REGISTER_LINK = By.xpath("(.//*[@class='Auth_link__1fOlj'])[1]");
-    public static final By FORGOT_PASSWORD_LINK = By.xpath("(.//*[@class='Auth_link__1fOlj'])[2]");
+    public static final By EmailInput = By.xpath(".//label[text()='Email']/../input");
+    public static final By PasswordInput = By.xpath(".//label[text()='Пароль']/../input");
+    public static final By LoginButton = By.xpath(".//button[text()='Войти']");
+    public static final By RegisterLink = By.xpath("(.//*[@class='Auth_link__1fOlj'])[1]");
+    public static final By ForgotPasswordLink = By.xpath("(.//*[@class='Auth_link__1fOlj'])[2]");
 
     public AuthorizationPage(WebDriver driver) {
         this.driver = driver;
@@ -27,37 +27,36 @@ public class AuthorizationPage {
     }
 
     // Методы для работы с формой авторизации
-
     // Ввод Email
     public void enterEmail(String email) {
-        scrollToElement(EMAIL_INPUT);
-        driver.findElement(EMAIL_INPUT).clear();
-        driver.findElement(EMAIL_INPUT).sendKeys(email);
+        scrollToElement(EmailInput);
+        driver.findElement(EmailInput).clear();
+        driver.findElement(EmailInput).sendKeys(email);
     }
 
     // Ввод Пароля
     public void enterPassword(String password) {
-        scrollToElement(PASSWORD_INPUT);
-        driver.findElement(PASSWORD_INPUT).clear();
-        driver.findElement(PASSWORD_INPUT).sendKeys(password);
+        scrollToElement(PasswordInput);
+        driver.findElement(PasswordInput).clear();
+        driver.findElement(PasswordInput).sendKeys(password);
     }
 
     // Клик на кнопку Вход
     public void login() {
-        scrollToElement(LOGIN_BUTTON);
-        driver.findElement(LOGIN_BUTTON).click();
+        scrollToElement(LoginButton);
+        driver.findElement(LoginButton).click();
     }
 
     // Клик по ссылке Восстановить пароль
     public void forgotPassword() {
-        scrollToElement(FORGOT_PASSWORD_LINK);
-        driver.findElement(FORGOT_PASSWORD_LINK).click();
+        scrollToElement(ForgotPasswordLink);
+        driver.findElement(ForgotPasswordLink).click();
     }
 
     // Переход на форму авторизации после восстановления пароля
     public void rememberPassword() {
-        scrollToElement(RecoverPasswordPage.REMEMBER_PASSWORD_LINK);
-        driver.findElement(RecoverPasswordPage.REMEMBER_PASSWORD_LINK).click();
+        scrollToElement(RecoverPasswordPage.RememberPassword);
+        driver.findElement(RecoverPasswordPage.RememberPassword).click();
     }
 
     // Заполнить и отправить данные авторизации

@@ -14,17 +14,16 @@ public class MainPage {
     private WebDriver driver;
 
     // Локаторы элементов
-    public static final By ENTER_ACCOUNT_BUTTON = By.xpath("//button[contains(@class, 'button_button__33qZ0') and text()='Войти в аккаунт']");
-    public static final By PERSONAL_ACCOUNT_BUTTON = By.xpath("//p[contains(@class, 'AppHeader_header__linkText__3q_va') and normalize-space()='Личный Кабинет']");
-    public static final By CHECKOUT_BUTTON = By.xpath("//button[.='Оформить заказ']");
-    public static final By BUNS_TAB = By.xpath(".//*[@class='text text_type_main-default' and contains(.,'Булки')]");
-    public static final By SAUCES_TAB = By.xpath(".//*[@class='text text_type_main-default' and contains(.,'Соусы')]");
-    public static final By FILLINGS_TAB = By.xpath(".//*[@class='text text_type_main-default' and contains(.,'Начинки')]");
-
+    public static final By EnterAccountButton = By.xpath("//button[contains(@class, 'button_button__33qZ0') and text()='Войти в аккаунт']");
+    public static final By PersonalAccountButton = By.xpath("//p[contains(@class, 'AppHeader_header__linkText__3q_va') and normalize-space()='Личный Кабинет']");
+    public static final By CheckoutButton = By.xpath("//button[.='Оформить заказ']");
+    public static final By BunsTab = By.xpath(".//*[@class='text text_type_main-default' and contains(.,'Булки')]");
+    public static final By SaucesTab = By.xpath(".//*[@class='text text_type_main-default' and contains(.,'Соусы')]");
+    public static final By FillingsTab = By.xpath(".//*[@class='text text_type_main-default' and contains(.,'Начинки')]");
     public static final By LogotypeButton = By.xpath(".//*[@class='AppHeader_header__logo__2D0X2']");
     public static final By ConstructorButton = By.xpath(".//*[@href='/' and contains(.,'Конструктор')]");
 
-    // Локатор перехода по кнопкам/разделам "Булки", "Соусы", "Начинки" главной страницы
+    // Локатор активности перехода по кнопкам/разделам "Булки", "Соусы", "Начинки" главной страницы
     private final By locatorBunsSaucesToppingsButtons = By.xpath(".//*[@style='display: flex;']");
 
     public MainPage(WebDriver driver) {
@@ -39,26 +38,26 @@ public class MainPage {
 
     // Метод для клика на кнопку Войти в аккаунт
     public void clickEnterAccountButton() {
-        scrollToElement(ENTER_ACCOUNT_BUTTON);
-        driver.findElement(ENTER_ACCOUNT_BUTTON).click();
+        scrollToElement(EnterAccountButton);
+        driver.findElement(EnterAccountButton).click();
     }
 
     // Метод для клика на кнопку Личный кабинет
     public void clickPersonalAccountButton() {
-        scrollToElement(PERSONAL_ACCOUNT_BUTTON);
-        driver.findElement(PERSONAL_ACCOUNT_BUTTON).click();
+        scrollToElement(PersonalAccountButton);
+        driver.findElement(PersonalAccountButton).click();
     }
 
     // Метод для перехода на вкладку Булки
     public void clickBunsTab() {
-        scrollToElement(BUNS_TAB);
-        driver.findElement(BUNS_TAB).click();
+        scrollToElement(BunsTab);
+        driver.findElement(BunsTab).click();
     }
 
     // Метод для перехода на вкладку Соусы
     public void clickSaucesTab() {
-        scrollToElement(SAUCES_TAB);
-        driver.findElement(SAUCES_TAB).click();
+        scrollToElement(SaucesTab);
+        driver.findElement(SaucesTab).click();
     }
 
     // Метод для клика на логотип
@@ -75,8 +74,8 @@ public class MainPage {
 
     // Метод для перехода на вкладку Начинки
     public void clickFillingsTab() {
-        scrollToElement(FILLINGS_TAB);
-        driver.findElement(FILLINGS_TAB).click();
+        scrollToElement(FillingsTab);
+        driver.findElement(FillingsTab).click();
     }
 
     // Метод для проверки активности вкладок Булки/Соусы/Начинки
@@ -93,12 +92,12 @@ public class MainPage {
     // Ожидание кнопки "Оформить заказ"
     public void waitForCheckoutButton() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(CHECKOUT_BUTTON));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(CheckoutButton));
     }
 
     // Возвращает кнопку "Оформить заказ"
     public WebElement getCheckoutButton() {
-        return driver.findElement(CHECKOUT_BUTTON);
+        return driver.findElement(CheckoutButton);
     }
 
 }
