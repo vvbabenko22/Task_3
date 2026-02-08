@@ -4,7 +4,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 import io.qameta.allure.junit5.AllureJunit5;
 import com.github.javafaker.Faker;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import pages.AuthorizationPage;
@@ -35,81 +34,54 @@ public class RegistrationUITest {
         faker = new Faker();
     }
 
-    // Регистрация в Chrome
-    @Test
-    @DisplayName("UI-тест регистрации в Chrome")
-    @Description("Регистрация нового пользователя в Chrome")
-    public void testRegistrationInChrome() {
-        TestConfiguration.setBrowserType(BrowserType.CHROME);
-        performRegistration();
+    @AfterEach
+    public void tearDown() {
+        DriverManager.quitDriver(); // Закрываем браузер
     }
 
-    // Регистрация в Яндекс.Браузере
-    @Test
-    @DisplayName("UI-тест регистрации в Яндекс.Браузере")
-    @Description("Регистрация нового пользователя в Яндекс.Браузере")
-    public void testRegistrationInYandexBrowser() {
-        TestConfiguration.setBrowserType(BrowserType.YANDEX_BROWSER);
-        performRegistration();
-    }
-
-    // Проверка минимальной длины пароля в Chrome
-    @Test
-    @DisplayName("UI-тест проверки минимальной длины пароля в Chrome")
-    @Description("Регистрация невозможна с паролем короче 6 символов в Chrome")
-    public void testMinimumPasswordLengthValidationChrome() {
-        TestConfiguration.setBrowserType(BrowserType.CHROME);
-        validateShortPassword();
-    }
-
-    // Проверка минимальной длины пароля в Яндекс.Браузере
-    @Test
-    @DisplayName("UI-тест проверки минимальной длины пароля в Яндекс.Браузере")
-    @Description("Регистрация невозможна с паролем короче 6 символов в Яндекс.Браузере")
-    public void testMinimumPasswordLengthValidationYandex() {
-        TestConfiguration.setBrowserType(BrowserType.YANDEX_BROWSER);
-        validateShortPassword();
-    }
-
+    // Общий метод регистрации и авторизации пользователя
     @Step("Регистрация пользователя и авторизация")
     private void performRegistration() {
-        String name = faker.name().firstName();
-        String email = faker.internet().emailAddress();
-        String password = faker.internet().password(6, 12);
+        String name = faker.name().firstName(); // Имя пользователя
+        String email = faker.internet().emailAddress(); // Email пользователя
+        String password = faker.internet().password(6, 12); // Пароль длиной от 6 до 12 символов
 
-        // Шаг 1: Регистрация пользователя
+        // Регистрация пользователя через UI
         registrationPage.register(name, email, password);
 
-        // Шаг 2: Ожидание после регистрации
-        sleep(3000); // Дожидаемся возможной задержки
+        // Ждем три секунды
+        sleep(3000);
 
-        // Шаг 3: Авторизация пользователя
+        // Авторизация пользователя
         authorizationPage.submitLoginData(email, password);
 
-        // Шаг 4: Проверка успешной авторизации
-        mainPage.waitForCheckoutButton();
+        // Проверка успешной авторизации
+        mainPage.waitForCheckoutButton(); // Ожидаем появление кнопки "Оформить заказ"
 
-        // Шаг 5: Удаление пользователя через API
-        deleteRegisteredUser(email, password);
+        // Удаление пользователя через API
+        deleteRegisteredUser(email, password); // Удаляем пользователя после успешного теста
     }
 
+    // Проверка попытки регистрации с коротким паролем (< 6 символов)
     @Step("Проверка недопустимых коротких паролей")
     private void validateShortPassword() {
-        String name = faker.name().firstName();
-        String email = faker.internet().emailAddress();
-        String shortPassword = faker.internet().password().substring(0, 5); // Пароль короче 6 символов
+        String name = faker.name().firstName(); // Имя пользователя
+        String email = faker.internet().emailAddress(); // Email пользователя
+        String shortPassword = faker.internet().password().substring(0, 5); // Короткий пароль (менее 6 символов)
 
-        // Регистрация пользователя с коротким паролем
+        // Пытаемся зарегистрироваться с коротким паролем
         registrationPage.register(name, email, shortPassword);
 
-        // Проверка наличия сообщения об ошибке
+        // Проверяем, что появилось сообщение об ошибке
         String errorMessage = registrationPage.getPasswordErrorMessage();
         assertTrue(errorMessage.contains("Некорректный пароль"));
     }
 
+    // Удаление пользователя через API после успешной регистрации
     @Step("Удаление пользователя через API")
     private void deleteRegisteredUser(String email, String password) {
-        Response loginResponse = given()
+        // Авторизация пользователя для получения токена
+        var loginResponse = given()
                 .contentType("application/json")
                 .body("{ \"email\": \"" + email + "\", \"password\": \"" + password + "\" }")
                 .when()
@@ -118,32 +90,80 @@ public class RegistrationUITest {
                 .log().all()
                 .extract().response();
 
-        // Проверяем успешность авторизации
-        loginResponse.then().assertThat().statusCode(equalTo(200))
-                .and().body("success", equalTo(true));
+        // Проверяем статус ответа
+        loginResponse.then().assertThat().statusCode(equalTo(200)).and().body("success", equalTo(true));
 
-        // Получаем accessToken
+        // Извлекаем accessToken
         String accessToken = loginResponse.jsonPath().getString("accessToken");
 
-        // Отправляем запрос на удаление пользователя
+        // Удаляем пользователя через API
         given()
                 .header("Authorization", accessToken)
                 .when()
                 .delete(DELETE_USER)
                 .then()
                 .log().all()
-                .assertThat().statusCode(equalTo(202))
+                .assertThat().statusCode(equalTo(202)) // Проверяем успешность удаления
                 .and().body("success", equalTo(true));
     }
 
+    // Пауза на указанное количество миллисекунд
     private void sleep(long millis) {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException ignored) {}
     }
 
-    @AfterEach
-    public void tearDown() {
-        DriverManager.quitDriver(); // Закрываем браузер
+    // Тесты для Chrome
+    @Nested
+    @DisplayName("Тесты для Chrome")
+    class ChromeTests {
+
+        @BeforeAll
+        public static void setup() {
+            TestConfiguration.setBrowserType(BrowserType.CHROME);
+        }
+
+        // Тест регистрации в Chrome
+        @Test
+        @DisplayName("UI-тест регистрации в Chrome")
+        @Description("Регистрация нового пользователя в Chrome")
+        public void testRegistrationInChrome() {
+            performRegistration(); // Выполняем регистрацию
+        }
+
+        // Тест проверки короткой длины пароля в Chrome
+        @Test
+        @DisplayName("UI-тест проверки минимальной длины пароля в Chrome")
+        @Description("Регистрация невозможна с паролем короче 6 символов в Chrome")
+        public void testMinimumPasswordLengthValidationChrome() {
+            validateShortPassword(); // Проверяем короткий пароль
+        }
+    }
+    // Тесты для Яндекс.Браузера
+    @Nested
+    @DisplayName("Тесты для Яндекс.Браузера")
+    class YandexBrowserTests {
+
+        @BeforeAll
+        public static void setup() {
+            TestConfiguration.setBrowserType(BrowserType.YANDEX_BROWSER);
+        }
+
+        // Тест регистрации в Яндекс.Браузере
+        @Test
+        @DisplayName("UI-тест регистрации в Яндекс.Браузере")
+        @Description("Регистрация нового пользователя в Яндекс.Браузере")
+        public void testRegistrationInYandexBrowser() {
+            performRegistration(); // Выполняем регистрацию
+        }
+
+        // Тест проверки короткой длины пароля в Яндекс.Браузере
+        @Test
+        @DisplayName("UI-тест проверки минимальной длины пароля в Яндекс.Браузере")
+        @Description("Регистрация невозможна с паролем короче 6 символов в Яндекс.Браузере")
+        public void testMinimumPasswordLengthValidationYandex() {
+            validateShortPassword(); // Проверяем короткий пароль
+        }
     }
 }

@@ -1,0 +1,1 @@
+{"uuid":"ab40a65d-7d24-4819-9f63-e3df5412205a","name":"Тесты для Chrome","children":["7ff74b86-e0a4-4e14-be7e-e93f1de6c461","5932e059-189b-466a-a916-bcc799fa4240"],"befores":[{"name":"setup","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1770543282810,"stop":1770543282811}],"afters":[],"start":1770543282810,"stop":1770543292867}

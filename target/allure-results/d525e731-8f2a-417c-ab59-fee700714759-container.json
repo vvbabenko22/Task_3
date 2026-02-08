@@ -1,0 +1,1 @@
+{"uuid":"d525e731-8f2a-417c-ab59-fee700714759","name":"Тесты для Яндекс.Браузера","children":["d2719d10-0e4f-488e-a444-05082030050f","341d20be-85cc-4993-b53e-87ca97e3f11e"],"befores":[{"name":"setup","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1770543195628,"stop":1770543195634}],"afters":[],"start":1770543195595,"stop":1770543202189}

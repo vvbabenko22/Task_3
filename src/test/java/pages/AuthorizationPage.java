@@ -70,7 +70,4 @@ public class AuthorizationPage {
     public void clickRegisterLink() {
 
     }
-
-    public void clickLoginLinkBack() {
-    }
 }

@@ -99,5 +99,4 @@ public class MainPage {
     public WebElement getCheckoutButton() {
         return driver.findElement(CheckoutButton);
     }
-
 }
