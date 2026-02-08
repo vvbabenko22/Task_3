@@ -1,1 +1,0 @@
-{"uuid":"d46ddd8b-b70d-49d1-ae19-a252dab7e776","name":"UI-тест авторизации через регистрацию и возврат в Chrome","children":["0c2d19cf-ad88-4012-babc-68c710bc1902"],"befores":[],"afters":[{"name":"tearDown","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1770538976474,"stop":1770538977743}],"start":1770538965906,"stop":1770538977745}

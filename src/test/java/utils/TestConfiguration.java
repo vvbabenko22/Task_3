@@ -10,4 +10,8 @@ public class TestConfiguration {
     public static void setBrowserType(BrowserType type) {
         browserType = type;
     }
+
+    public static boolean hasBrowserType() {
+        return false;
+    }
 }

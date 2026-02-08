@@ -1,1 +1,0 @@
-{"uuid":"f1edb03d-2f84-4c05-ba35-3ea5e9596d75","name":"UI-тест авторизации и выбора вкладок в конструкторе для Chrome","children":["8d5678ce-b8ed-48f7-9f89-fc753a7fa15a"],"befores":[],"afters":[{"name":"tearDown","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1770531443833,"stop":1770531445180}],"start":1770531436901,"stop":1770531445182}

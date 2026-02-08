@@ -1,1 +1,0 @@
-{"uuid":"581be1b0-b77f-492b-b98e-2ed06ea8deb3","name":"TabSwitchingTest","children":["afa0e998-9ce3-4dcd-92f5-86f2bedf4c48","329db3b9-99c0-4e3d-ba63-dcff8527102c"],"befores":[{"name":"beforeAll","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1770530934397,"stop":1770530934403}],"afters":[],"start":1770530934356,"stop":1770530955290}
