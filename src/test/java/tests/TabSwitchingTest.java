@@ -1,5 +1,3 @@
-package tests;
-
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 import io.qameta.allure.junit5.AllureJunit5;
@@ -19,20 +17,26 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import com.github.javafaker.Faker;
 import java.time.Duration;
-import java.util.UUID;
 
 @ExtendWith(AllureJunit5.class)
 public class TabSwitchingTest {
+
+    private MainPage mainPage;
+    private AuthorizationPage authPage;
+    private RegistrationPage regPage;
     private String email;
     private String password;
+    private String token;
+    Faker faker = new Faker();
 
-    // Общие вспомогательные методы вынесены наружу
-    // Метод для создания пользователя
+    // Метод создания временного пользователя через API
     @Step("Создание временного пользователя через API")
-    private static void createTemporaryUser(String[] dataHolder) {
-        final String uniqueEmail = UUID.randomUUID() + "@gmail.com";
-        final String securePassword = "Str0ngPa$$w0rd";
+    private void createTemporaryUser() {
+        // Генерируем уникальный email и надежный пароль с помощью Faker
+        final String uniqueEmail = faker.internet().emailAddress();
+        final String securePassword = faker.internet().password(6, 12); // длина пароля от 6 до 12 символов
         final String userBody = "{\"email\":\"" + uniqueEmail + "\", \"password\":\"" + securePassword + "\", \"name\":\"autotest_user\"}";
 
         var response = given()
@@ -45,14 +49,14 @@ public class TabSwitchingTest {
                 .extract().response();
 
         response.then().assertThat().statusCode(equalTo(200));
-        dataHolder[0] = uniqueEmail;
-        dataHolder[1] = securePassword;
-        dataHolder[2] = response.jsonPath().getString("accessToken");
+        this.email = uniqueEmail;
+        this.password = securePassword;
+        this.token = response.jsonPath().getString("accessToken");
     }
 
-    // Метод для удаления пользователя
+    // Общий метод для удаления пользователя
     @Step("Удаление пользователя через API")
-    private static void deleteRegisteredUser(String email, String password) {
+    private void deleteRegisteredUser() {
         Response loginResponse = given()
                 .contentType("application/json")
                 .body("{ \"email\": \"" + email + "\", \"password\": \"" + password + "\" }")
@@ -71,46 +75,46 @@ public class TabSwitchingTest {
                 .delete(DELETE_USER)
                 .then()
                 .log().all()
-                .assertThat().statusCode(equalTo(202)); // Проверяем успешность удаления
+                .assertThat().statusCode(equalTo(202));
     }
 
-    // Главный тест для Chrome
-    @DisplayName("Тесты для Chrome")
-    static class ChromeTests {
+    // Общий метод очистки после теста
+    @AfterEach
+    public void tearDown() {
+        deleteRegisteredUser(); // Удаляем пользователя через API
+        DriverManager.quitDriver(); // Закрываем браузер
+    }
 
-        @BeforeAll
-        public static void beforeAll() {
+    // Тест для Chrome
+    @Nested
+    @DisplayName("Тесты для Chrome")
+    class ChromeTests {
+
+        public ChromeTests() {
             TestConfiguration.setBrowserType(BrowserType.CHROME);
         }
 
         @Test
         @DisplayName("UI-тест авторизации и выбора вкладок в конструкторе для Chrome")
         @Description("Авторизация через кнопку 'Личный кабинет' и последующий переход в конструктор с выбором вкладок 'Соусы', 'Начинки', 'Булки'")
-        public void testLoginAndSelectTabsInChrome() throws Exception {
-            // Массив для хранения данных пользователя
-            String[] userData = new String[3];
-
+        public void testLoginAndSelectTabsInChrome() {
             // Переходим на главную страницу
             DriverManager.getDriver().get(HOST);
 
             // Создаем пользователя
-            createTemporaryUser(userData);
+            createTemporaryUser();
 
-            // Запоминаем созданные данные
-            String email = userData[0];
-            String password = userData[1];
-
-            // Переход на главную страницу и открытие страницы авторизации
+            // Переходим на страницу авторизации
             WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(10));
             wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.PersonalAccountButton));
-            MainPage mainPage = new MainPage(DriverManager.getDriver());
+            mainPage = new MainPage(DriverManager.getDriver());
             mainPage.clickPersonalAccountButton();
 
             // Авторизация пользователя
-            AuthorizationPage authPage = new AuthorizationPage(DriverManager.getDriver());
+            authPage = new AuthorizationPage(DriverManager.getDriver());
             authPage.submitLoginData(email, password);
 
-            // Дожидаемся полной загрузки страницы после авторизации
+            // Дождёмся полной загрузки страницы после авторизации
             wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
 
             // Повторный клик на вкладку "Личный кабинет"
@@ -162,43 +166,36 @@ public class TabSwitchingTest {
         }
     }
 
-    // Главный тест для Яндекс.Браузера
+    // Тест для Яндекс.Браузера
+    @Nested
     @DisplayName("Тесты для Яндекс.Браузера")
-    static class YandexTests {
+    class YandexTests {
 
-        @BeforeAll
-        public static void beforeAll() {
+        public YandexTests() {
             TestConfiguration.setBrowserType(BrowserType.YANDEX_BROWSER);
         }
 
         @Test
         @DisplayName("UI-тест авторизации и выбора вкладок в конструкторе для Яндекс.Браузера")
         @Description("Авторизация через кнопку 'Личный кабинет' и последующий переход в конструктор с выбором вкладок 'Соусы', 'Начинки', 'Булки'")
-        public void testLoginAndSelectTabsInYandex() throws Exception {
-            // Массив для хранения данных пользователя
-            String[] userData = new String[3];
-
+        public void testLoginAndSelectTabsInYandex() {
             // Переходим на главную страницу
             DriverManager.getDriver().get(HOST);
 
             // Создаем пользователя
-            createTemporaryUser(userData);
+            createTemporaryUser();
 
-            // Запоминаем созданные данные
-            String email = userData[0];
-            String password = userData[1];
-
-            // Переход на главную страницу и открытие страницы авторизации
+            // Открываем страницу авторизации
             WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(10));
             wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.PersonalAccountButton));
-            MainPage mainPage = new MainPage(DriverManager.getDriver());
+            mainPage = new MainPage(DriverManager.getDriver());
             mainPage.clickPersonalAccountButton();
 
             // Авторизация пользователя
-            AuthorizationPage authPage = new AuthorizationPage(DriverManager.getDriver());
+            authPage = new AuthorizationPage(DriverManager.getDriver());
             authPage.submitLoginData(email, password);
 
-            // Дожидаемся полной загрузки страницы после авторизации
+            // Дождёмся полной загрузки страницы после авторизации
             wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
 
             // Повторный клик на вкладку "Личный кабинет"
@@ -248,14 +245,5 @@ public class TabSwitchingTest {
             // Проверка отображения кнопки "Войти" после выхода
             wait.until(ExpectedConditions.visibilityOfElementLocated(AuthorizationPage.LoginButton));
         }
-    }
-
-    // После завершения теста очищаем состояние системы
-    @AfterEach
-    public void cleanUp() {
-        if (this.email != null && this.password != null) {
-            deleteRegisteredUser(this.email, this.password);
-        }
-        DriverManager.quitDriver(); // Закрываем браузер
     }
 }
