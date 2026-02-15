@@ -1,4 +1,4 @@
-package pages;
+package tests.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -11,10 +11,16 @@ public class RecoverPasswordPage {
 
     private final WebDriver driver;
 
-    // Локаторы элементов
-    public static final By RestorePassword = By.xpath(".//*[text()='Восстановление пароля']");
-    public static final By RememberPassword = By.xpath(".//a[text()='Войти']");
+    // Приватные локаторы элементов
+    private final By restorePasswordLabel = By.xpath(".//*[text()='Восстановление пароля']");
+    private final By rememberPasswordLink = By.xpath(".//a[text()='Войти']");
 
+    // Геттеры для локаторов
+    public By getRememberPasswordLink() {
+        return rememberPasswordLink;
+    }
+
+    // Инициализация драйвера
     public RecoverPasswordPage(WebDriver driver) {
         this.driver = driver;
     }
@@ -22,6 +28,6 @@ public class RecoverPasswordPage {
     // Ожидание загрузки страницы восстановления пароля
     public void waitForPageLoad() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.presenceOfElementLocated(RestorePassword));
+        wait.until(ExpectedConditions.presenceOfElementLocated(restorePasswordLabel));
     }
 }

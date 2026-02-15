@@ -1,22 +1,29 @@
+package tests;
+
+import com.github.javafaker.Faker;
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 import io.qameta.allure.junit5.AllureJunit5;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import pages.*;
-import pages.MainPage;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import tests.pages.AuthorizationPage;
+import tests.pages.MainPage;
+import tests.pages.RecoverPasswordPage;
+import tests.pages.RegistrationPage;
 import utils.BrowserType;
 import utils.DriverManager;
 import utils.TestConfiguration;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.time.Duration;
+
 import static config.RestConfig.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import com.github.javafaker.Faker;
-import java.time.Duration;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 @ExtendWith(AllureJunit5.class)
 public class MultiAuthorizationUITest {
@@ -40,7 +47,7 @@ public class MultiAuthorizationUITest {
     @Step("Создание временного пользователя через API")
     private void createTemporaryUser() {
 
-        // Генерируем уникальный email и пароль с помощью Faker
+        // Генерируем email и пароль с помощью Faker
         Faker faker = new Faker();
         final String uniqueEmail = faker.internet().emailAddress();
         final String securePassword = faker.internet().password(6, 12); // длина пароля от 6 до 12 символов
@@ -115,14 +122,14 @@ public class MultiAuthorizationUITest {
 
             // Открываем страницу авторизации
             WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(10));
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.EnterAccountButton));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getEnterAccountButton()));
             mainPage.clickEnterAccountButton();
 
             // Авторизация пользователя через UI
             authPage.submitLoginData(email, password);
 
             // Проверка успешной авторизации (наличие кнопки 'Оформить заказ')
-            wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(mainPage.getCheckoutButtonLocator()));
             assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
         }
 
@@ -140,14 +147,14 @@ public class MultiAuthorizationUITest {
 
             // Переходим на главную страницу и открываем страницу авторизации через личный кабинет
             WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(10));
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.PersonalAccountButton));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getPersonalAccountButton()));
             mainPage.clickPersonalAccountButton();
 
             // Авторизация пользователя через UI
             authPage.submitLoginData(email, password);
 
             // Проверка успешной авторизации (наличие кнопки 'Оформить заказ')
-            wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(mainPage.getCheckoutButtonLocator()));
             assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
         }
 
@@ -160,29 +167,29 @@ public class MultiAuthorizationUITest {
             // Переходим на главную страницу
             DriverManager.getDriver().get(HOST);
 
-            // Создаем пользователя
+            // Создаем временного пользователя
             createTemporaryUser();
 
-            // Переходим на главную страницу и нажимаем на кнопку 'Войти в аккаунт'
+            // Открываем главную страницу и нажимаем на кнопку входа
             WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(30));
             wait.until(ExpectedConditions.jsReturnsValue("return document.readyState === 'complete';"));
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.EnterAccountButton));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getEnterAccountButton()));
             mainPage.clickEnterAccountButton();
 
             // Переходим на страницу регистрации
-            wait.until(ExpectedConditions.presenceOfElementLocated(AuthorizationPage.RegisterLink));
-            authPage.clickRegisterLink();
+            wait.until(ExpectedConditions.presenceOfElementLocated(authPage.getLoginButton()));
+            authPage.clickRegisterLink(); // Теперь этот метод работает!
 
             // Возвращаемся на форму авторизации
-            wait.until(ExpectedConditions.presenceOfElementLocated(RegistrationPage.LoginLinkBack));
+            wait.until(ExpectedConditions.presenceOfElementLocated(regPage.getLoginLinkBack()));
             regPage.clickAlreadyRegisteredLink();
 
             // Авторизация пользователя через UI
-            wait.until(ExpectedConditions.elementToBeClickable(AuthorizationPage.LoginButton));
+            wait.until(ExpectedConditions.elementToBeClickable(authPage.getLoginButton()));
             authPage.submitLoginData(email, password);
 
-            // Проверка успешной авторизации (появление кнопки "Оформить заказ")
-            wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
+            // Проверка успешной авторизации (появляется кнопка "Оформить заказ")
+            wait.until(ExpectedConditions.visibilityOfElementLocated(mainPage.getCheckoutButtonLocator()));
             assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
         }
 
@@ -200,11 +207,11 @@ public class MultiAuthorizationUITest {
 
             // Переходим на главную страницу и нажимаем на кнопку 'Войти в аккаунт'
             WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(30));
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.EnterAccountButton));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getEnterAccountButton()));
             mainPage.clickEnterAccountButton();
 
             // Нажимаем на ссылку 'Восстановить пароль'
-            wait.until(ExpectedConditions.presenceOfElementLocated(AuthorizationPage.ForgotPasswordLink));
+            wait.until(ExpectedConditions.presenceOfElementLocated(authPage.getEmailInput()));
             authPage.forgotPassword();
 
             // Ожидание загрузки страницы восстановления пароля
@@ -212,149 +219,149 @@ public class MultiAuthorizationUITest {
             recoverPasswordPage.waitForPageLoad();
 
             // Возвращаемся на форму авторизации
-            wait.until(ExpectedConditions.presenceOfElementLocated(RecoverPasswordPage.RememberPassword));
+            wait.until(ExpectedConditions.presenceOfElementLocated(new RecoverPasswordPage(DriverManager.getDriver()).getRememberPasswordLink()));
             authPage.rememberPassword();
 
             // Авторизация пользователя через UI
-            wait.until(ExpectedConditions.elementToBeClickable(AuthorizationPage.LoginButton));
+            wait.until(ExpectedConditions.elementToBeClickable(authPage.getForgotPasswordLink()));
             authPage.submitLoginData(email, password);
 
             // Проверка успешной авторизации (появление кнопки "Оформить заказ")
-            wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
-            assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
-        }
-    }
-
-    // Группа тестов для Yandex Browser
-    @Nested
-    @DisplayName("Тесты для Yandex Browser")
-    class YandexBrowserTests {
-
-        public YandexBrowserTests() {
-            TestConfiguration.setBrowserType(BrowserType.YANDEX_BROWSER);
-        }
-
-        // Тест №1: Логин через кнопку "Войти в аккаунт" в Yandex Browser
-        @Test
-        @DisplayName("UI-тест авторизации через кнопку 'Войти в аккаунт' в Yandex Browser")
-        @Description("Авторизация через кнопку 'Войти в аккаунт' на главной странице в Yandex Browser")
-        public void testLoginThroughEnterAccountButtonYandex() {
-
-            // Переходим на главную страницу
-            DriverManager.getDriver().get(HOST);
-
-            // Создаем пользователя
-            createTemporaryUser();
-
-            // Переходим на главную страницу и открываем страницу авторизации
-            WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(10));
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.EnterAccountButton));
-            mainPage.clickEnterAccountButton();
-
-            // Авторизация пользователя через UI
-            authPage.submitLoginData(email, password);
-
-            // Проверка успешной авторизации (наличие кнопки 'Оформить заказ')
-            wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(mainPage.getCheckoutButtonLocator()));
             assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
         }
 
-        // Тест №2: Логин через кнопку "Личный кабинет" в Yandex Browser
-        @Test
-        @DisplayName("UI-тест авторизации через кнопку 'Личный кабинет' в Yandex Browser")
-        @Description("Авторизация через кнопку 'Личный кабинет' на главной странице в Yandex Browser")
-        public void testLoginThroughPersonalAccountButtonYandex() {
+        // Группа тестов для Yandex Browser
+        @Nested
+        @DisplayName("Тесты для Yandex Browser")
+        class YandexBrowserTests {
 
-            // Переходим на главную страницу
-            DriverManager.getDriver().get(HOST);
+            public YandexBrowserTests() {
+                TestConfiguration.setBrowserType(BrowserType.YANDEX_BROWSER);
+            }
 
-            // Создаем пользователя
-            createTemporaryUser();
+            // Тест №1: Логин через кнопку "Войти в аккаунт" в Yandex Browser
+            @Test
+            @DisplayName("UI-тест авторизации через кнопку 'Войти в аккаунт' в Yandex Browser")
+            @Description("Авторизация через кнопку 'Войти в аккаунт' на главной странице в Yandex Browser")
+            public void testLoginThroughEnterAccountButtonYandex() {
 
-            // Переходим на главную страницу и открываем страницу авторизации через личный кабинет
-            WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(10));
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.PersonalAccountButton));
-            mainPage.clickPersonalAccountButton();
+                // Переходим на главную страницу
+                DriverManager.getDriver().get(HOST);
 
-            // Авторизация пользователя через UI
-            authPage.submitLoginData(email, password);
+                // Создаем пользователя
+                createTemporaryUser();
 
-            // Проверка успешной авторизации (наличие кнопки 'Оформить заказ')
-            wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
-            assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
-        }
+                // Переходим на главную страницу и открываем страницу авторизации
+                WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(10));
+                wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getEnterAccountButton()));
+                mainPage.clickEnterAccountButton();
 
-        // Тест №3: Вход через кнопку в форме регистрации
-        @Test
-        @DisplayName("UI-тест авторизации через кнопку в форме регистрации")
-        @Description("Авторизация через кнопку 'Войти в аккаунт' с последующим переходом на форму регистрации и возвратом в авторизацию в Yandex Browser")
-        public void testLoginThroughRegisterFormRedirectYandex() {
+                // Авторизация пользователя через UI
+                authPage.submitLoginData(email, password);
 
-            // Переходим на главную страницу
-            DriverManager.getDriver().get(HOST);
+                // Проверка успешной авторизации (наличие кнопки 'Оформить заказ')
+                wait.until(ExpectedConditions.visibilityOfElementLocated(mainPage.getCheckoutButtonLocator()));
+                assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
+            }
 
-            // Создаем пользователя
-            createTemporaryUser();
+            // Тест №2: Логин через кнопку "Личный кабинет" в Yandex Browser
+            @Test
+            @DisplayName("UI-тест авторизации через кнопку 'Личный кабинет' в Yandex Browser")
+            @Description("Авторизация через кнопку 'Личный кабинет' на главной странице в Yandex Browser")
+            public void testLoginThroughPersonalAccountButtonYandex() {
 
-            // Переходим на главную страницу и нажимаем на кнопку 'Войти в аккаунт'
-            WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(30));
-            wait.until(ExpectedConditions.jsReturnsValue("return document.readyState === 'complete';"));
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.EnterAccountButton));
-            mainPage.clickEnterAccountButton();
+                // Переходим на главную страницу
+                DriverManager.getDriver().get(HOST);
 
-            // Переходим на страницу регистрации
-            wait.until(ExpectedConditions.presenceOfElementLocated(AuthorizationPage.RegisterLink));
-            authPage.clickRegisterLink();
+                // Создаем пользователя
+                createTemporaryUser();
 
-            // Возвращаемся на форму авторизации
-            wait.until(ExpectedConditions.presenceOfElementLocated(RegistrationPage.LoginLinkBack));
-            regPage.clickAlreadyRegisteredLink();
+                // Переходим на главную страницу и открываем страницу авторизации через личный кабинет
+                WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(10));
+                wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getPersonalAccountButton()));
+                mainPage.clickPersonalAccountButton();
 
-            // Авторизация пользователя через UI
-            wait.until(ExpectedConditions.elementToBeClickable(AuthorizationPage.LoginButton));
-            authPage.submitLoginData(email, password);
+                // Авторизация пользователя через UI
+                authPage.submitLoginData(email, password);
 
-            // Проверка успешной авторизации (появление кнопки "Оформить заказ")
-            wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
-            assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
-        }
+                // Проверка успешной авторизации (наличие кнопки 'Оформить заказ')
+                wait.until(ExpectedConditions.visibilityOfElementLocated(mainPage.getCheckoutButtonLocator()));
+                assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
+            }
 
-        // Тест №4: Авторизация через восстановление пароля
-        @Test
-        @DisplayName("UI-тест авторизации через восстановление пароля в Yandex Browser")
-        @Description("Авторизация через кнопку 'Забыли пароль?' и последующая авторизация в Yandex Browser")
-        public void testForgotPasswordFlowYandex() {
+            // Тест №3: Вход через кнопку в форме регистрации
+            @Test
+            @DisplayName("UI-тест авторизации через кнопку в форме регистрации")
+            @Description("Авторизация через кнопку 'Войти в аккаунт' с последующим переходом на форму регистрации и возвратом в авторизацию в Yandex Browser")
+            public void testLoginThroughRegisterFormRedirectYandex() {
 
-            // Переходим на главную страницу
-            DriverManager.getDriver().get(HOST);
+                // Переходим на главную страницу
+                DriverManager.getDriver().get(HOST);
 
-            // Создаем пользователя
-            createTemporaryUser();
+                // Создаем пользователя
+                createTemporaryUser();
 
-            // Переходим на главную страницу и нажимаем на кнопку 'Войти в аккаунт'
-            WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(30));
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.EnterAccountButton));
-            mainPage.clickEnterAccountButton();
+                // Переходим на главную страницу и нажимаем на кнопку 'Войти в аккаунт'
+                WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(30));
+                wait.until(ExpectedConditions.jsReturnsValue("return document.readyState === 'complete';"));
+                wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getEnterAccountButton()));
+                mainPage.clickEnterAccountButton();
 
-            // Нажимаем на ссылку 'Восстановить пароль'
-            wait.until(ExpectedConditions.presenceOfElementLocated(AuthorizationPage.ForgotPasswordLink));
-            authPage.forgotPassword();
+                // Переходим на страницу регистрации
+                wait.until(ExpectedConditions.presenceOfElementLocated(authPage.getRegisterLink()));
+                authPage.clickRegisterLink(); // Этот метод теперь реализован и работает
 
-            // Ожидание загрузки страницы восстановления пароля
-            RecoverPasswordPage recoverPasswordPage = new RecoverPasswordPage(DriverManager.getDriver());
-            recoverPasswordPage.waitForPageLoad();
+                // Возвращаемся на форму авторизации
+                wait.until(ExpectedConditions.presenceOfElementLocated(regPage.getLoginLinkBack()));
+                regPage.clickAlreadyRegisteredLink();
 
-            // Возвращаемся на форму авторизации
-            wait.until(ExpectedConditions.presenceOfElementLocated(RecoverPasswordPage.RememberPassword));
-            authPage.rememberPassword();
+                // Авторизация пользователя через UI
+                wait.until(ExpectedConditions.elementToBeClickable(authPage.getRegisterLink()));
+                authPage.submitLoginData(email, password);
 
-            // Авторизация пользователя через UI
-            wait.until(ExpectedConditions.elementToBeClickable(AuthorizationPage.LoginButton));
-            authPage.submitLoginData(email, password);
+                // Проверка успешной авторизации (появление кнопки "Оформить заказ")
+                wait.until(ExpectedConditions.visibilityOfElementLocated(mainPage.getCheckoutButtonLocator()));
+                assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
+            }
 
-            // Проверка успешной авторизации (появление кнопки "Оформить заказ")
-            wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
-            assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
+            // Тест №4: Авторизация через восстановление пароля
+            @Test
+            @DisplayName("UI-тест авторизации через восстановление пароля в Yandex Browser")
+            @Description("Авторизация через кнопку 'Забыли пароль?' и последующая авторизация в Yandex Browser")
+            public void testForgotPasswordFlowYandex() {
+
+                // Переходим на главную страницу
+                DriverManager.getDriver().get(HOST);
+
+                // Создаем пользователя
+                createTemporaryUser();
+
+                // Переходим на главную страницу и нажимаем на кнопку 'Войти в аккаунт'
+                WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(30));
+                wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getEnterAccountButton()));
+                mainPage.clickEnterAccountButton();
+
+                // Нажимаем на ссылку 'Восстановить пароль'
+                wait.until(ExpectedConditions.presenceOfElementLocated(authPage.getPasswordInput()));
+                authPage.forgotPassword();
+
+                // Ожидание загрузки страницы восстановления пароля
+                RecoverPasswordPage recoverPasswordPage = new RecoverPasswordPage(DriverManager.getDriver());
+                recoverPasswordPage.waitForPageLoad();
+
+                // Возвращаемся на форму авторизации
+                wait.until(ExpectedConditions.presenceOfElementLocated(new RecoverPasswordPage(DriverManager.getDriver()).getRememberPasswordLink()));
+                authPage.rememberPassword();
+
+                // Авторизация пользователя через UI
+                wait.until(ExpectedConditions.elementToBeClickable(authPage.getPasswordInput()));
+                authPage.submitLoginData(email, password);
+
+                // Проверка успешной авторизации (появление кнопки "Оформить заказ")
+                wait.until(ExpectedConditions.visibilityOfElementLocated(mainPage.getCheckoutButtonLocator()));
+                assertNotNull(mainPage.getCheckoutButton(), "Кнопка 'Оформить заказ' не найдена!");
+            }
         }
     }
 }

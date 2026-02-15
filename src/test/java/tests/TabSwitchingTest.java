@@ -1,24 +1,31 @@
+package tests;
+
+import com.github.javafaker.Faker;
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 import io.qameta.allure.junit5.AllureJunit5;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import pages.AuthorizationPage;
-import pages.MainPage;
-import pages.ProfilePage;
-import pages.RegistrationPage;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import tests.pages.AuthorizationPage;
+import tests.pages.MainPage;
+import tests.pages.ProfilePage;
+import tests.pages.RegistrationPage;
 import utils.BrowserType;
 import utils.DriverManager;
 import utils.TestConfiguration;
+
+import java.time.Duration;
+
 import static config.RestConfig.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import com.github.javafaker.Faker;
-import java.time.Duration;
 
 @ExtendWith(AllureJunit5.class)
 public class TabSwitchingTest {
@@ -34,7 +41,7 @@ public class TabSwitchingTest {
     // Метод создания временного пользователя через API
     @Step("Создание временного пользователя через API")
     private void createTemporaryUser() {
-        // Генерируем уникальный email и надежный пароль с помощью Faker
+        // Генерируем уникальный email и пароль с помощью Faker
         final String uniqueEmail = faker.internet().emailAddress();
         final String securePassword = faker.internet().password(6, 12); // длина пароля от 6 до 12 символов
         final String userBody = "{\"email\":\"" + uniqueEmail + "\", \"password\":\"" + securePassword + "\", \"name\":\"autotest_user\"}";
@@ -98,6 +105,10 @@ public class TabSwitchingTest {
         @DisplayName("UI-тест авторизации и выбора вкладок в конструкторе для Chrome")
         @Description("Авторизация через кнопку 'Личный кабинет' и последующий переход в конструктор с выбором вкладок 'Соусы', 'Начинки', 'Булки'")
         public void testLoginAndSelectTabsInChrome() {
+
+            // Cоздаём объект mainPage
+            mainPage = new MainPage(DriverManager.getDriver());
+
             // Переходим на главную страницу
             DriverManager.getDriver().get(HOST);
 
@@ -106,7 +117,7 @@ public class TabSwitchingTest {
 
             // Переходим на страницу авторизации
             WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(10));
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.PersonalAccountButton));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getPersonalAccountButton()));
             mainPage = new MainPage(DriverManager.getDriver());
             mainPage.clickPersonalAccountButton();
 
@@ -115,46 +126,46 @@ public class TabSwitchingTest {
             authPage.submitLoginData(email, password);
 
             // Дождёмся полной загрузки страницы после авторизации
-            wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(mainPage.getCheckoutButtonLocator()));
 
             // Повторный клик на вкладку "Личный кабинет"
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.PersonalAccountButton));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getPersonalAccountButton()));
             mainPage.clickPersonalAccountButton();
 
             // Переход в конструктор
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.ConstructorButton));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getConstructorButton()));
             mainPage.clickConstructor();
 
             // Нажатие на вкладку "Соусы" и проверка активности вкладки
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.SaucesTab));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getSaucesTab()));
             mainPage.clickSaucesTab();
             wait.until((webDriver) -> mainPage.isTabActive());
             assertTrue(mainPage.isTabActive(), "Вкладка 'Соусы' не активна!");
 
             // Нажатие на вкладку "Начинки" и проверка активности вкладки
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.FillingsTab));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getFillingsTab()));
             mainPage.clickFillingsTab();
             wait.until((webDriver) -> mainPage.isTabActive());
             assertTrue(mainPage.isTabActive(), "Вкладка 'Начинки' не активна!");
 
             // Нажатие на вкладку "Булки" и проверка активности вкладки
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.BunsTab));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getBunsTab()));
             mainPage.clickBunsTab();
             wait.until((webDriver) -> mainPage.isTabActive());
             assertTrue(mainPage.isTabActive(), "Вкладка 'Булки' не активна!");
 
             // Переход обратно в Личный кабинет
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.PersonalAccountButton));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getPersonalAccountButton()));
             mainPage.clickPersonalAccountButton();
 
             // Переход по клику на логотип и проверка активности вкладки "Булки"
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.LogotypeButton));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getLogotypeButton()));
             mainPage.clickLogotypeTab();
             wait.until((webDriver) -> mainPage.isTabActive());
             assertTrue(mainPage.isTabActive(), "Вкладка 'Булки' не активна после клика на логотип!");
 
             // Переход обратно в Личный кабинет
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.PersonalAccountButton));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getPersonalAccountButton()));
             mainPage.clickPersonalAccountButton();
 
             // Выход из Личного кабинета
@@ -162,7 +173,7 @@ public class TabSwitchingTest {
             profilePage.logOut();
 
             // Проверка отображения кнопки "Войти" после выхода
-            wait.until(ExpectedConditions.visibilityOfElementLocated(AuthorizationPage.LoginButton));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(authPage.getLoginButton()));
         }
     }
 
@@ -179,6 +190,10 @@ public class TabSwitchingTest {
         @DisplayName("UI-тест авторизации и выбора вкладок в конструкторе для Яндекс.Браузера")
         @Description("Авторизация через кнопку 'Личный кабинет' и последующий переход в конструктор с выбором вкладок 'Соусы', 'Начинки', 'Булки'")
         public void testLoginAndSelectTabsInYandex() {
+
+            // Cоздаём объект mainPage
+            mainPage = new MainPage(DriverManager.getDriver());
+
             // Переходим на главную страницу
             DriverManager.getDriver().get(HOST);
 
@@ -187,7 +202,7 @@ public class TabSwitchingTest {
 
             // Открываем страницу авторизации
             WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(10));
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.PersonalAccountButton));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getPersonalAccountButton()));
             mainPage = new MainPage(DriverManager.getDriver());
             mainPage.clickPersonalAccountButton();
 
@@ -196,46 +211,46 @@ public class TabSwitchingTest {
             authPage.submitLoginData(email, password);
 
             // Дождёмся полной загрузки страницы после авторизации
-            wait.until(ExpectedConditions.visibilityOfElementLocated(MainPage.CheckoutButton));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(mainPage.getCheckoutButtonLocator()));
 
             // Повторный клик на вкладку "Личный кабинет"
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.PersonalAccountButton));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getPersonalAccountButton()));
             mainPage.clickPersonalAccountButton();
 
             // Переход в конструктор
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.ConstructorButton));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getConstructorButton()));
             mainPage.clickConstructor();
 
             // Нажатие на вкладку "Соусы" и проверка активности вкладки
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.SaucesTab));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getSaucesTab()));
             mainPage.clickSaucesTab();
             wait.until((webDriver) -> mainPage.isTabActive());
             assertTrue(mainPage.isTabActive(), "Вкладка 'Соусы' не активна!");
 
             // Нажатие на вкладку "Начинки" и проверка активности вкладки
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.FillingsTab));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getFillingsTab()));
             mainPage.clickFillingsTab();
             wait.until((webDriver) -> mainPage.isTabActive());
             assertTrue(mainPage.isTabActive(), "Вкладка 'Начинки' не активна!");
 
             // Нажатие на вкладку "Булки" и проверка активности вкладки
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.BunsTab));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getBunsTab()));
             mainPage.clickBunsTab();
             wait.until((webDriver) -> mainPage.isTabActive());
             assertTrue(mainPage.isTabActive(), "Вкладка 'Булки' не активна!");
 
             // Переход обратно в Личный кабинет
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.PersonalAccountButton));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getPersonalAccountButton()));
             mainPage.clickPersonalAccountButton();
 
             // Переход по клику на логотип и проверка активности вкладки "Булки"
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.LogotypeButton));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getLogotypeButton()));
             mainPage.clickLogotypeTab();
             wait.until((webDriver) -> mainPage.isTabActive());
             assertTrue(mainPage.isTabActive(), "Вкладка 'Булки' не активна после клика на логотип!");
 
             // Переход обратно в Личный кабинет
-            wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.PersonalAccountButton));
+            wait.until(ExpectedConditions.presenceOfElementLocated(mainPage.getPersonalAccountButton()));
             mainPage.clickPersonalAccountButton();
 
             // Выход из Личного кабинета
@@ -243,7 +258,7 @@ public class TabSwitchingTest {
             profilePage.logOut();
 
             // Проверка отображения кнопки "Войти" после выхода
-            wait.until(ExpectedConditions.visibilityOfElementLocated(AuthorizationPage.LoginButton));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(authPage.getLoginButton()));
         }
     }
 }

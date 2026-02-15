@@ -1,4 +1,4 @@
-package pages;
+package tests.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -9,15 +9,20 @@ public class RegistrationPage {
 
     private final WebDriver driver;
 
-    // Локаторы элементов
+    // Приватные локаторы элементов
+    private final By inputName = By.xpath(".//fieldset[1]//input");
+    private final By inputEmail = By.xpath(".//fieldset[2]//input");
+    private final By inputPassword = By.xpath(".//fieldset[3]//input");
+    private final By registerButton = By.xpath(".//button[text()='Зарегистрироваться']");
+    private final By errorPassword = By.xpath(".//fieldset[3]//p");
+    private final By loginLinkBack = By.xpath(".//*[text()='Войти']");
 
-    public static final By InputName = By.xpath(".//fieldset[1]//input");
-    public static final By InputEmail = By.xpath(".//fieldset[2]//input");
-    public static final By InputButton = By.xpath(".//fieldset[3]//input");
-    public static final By RegisterButton = By.xpath(".//button[text()='Зарегистрироваться']");
-    public static final By ErrorPassword = By.xpath(".//fieldset[3]//p");
-    public static By LoginLinkBack = By.xpath(".//*[text()='Войти']");
+    // Геттеры для локаторов
+    public By getLoginLinkBack() {
+        return loginLinkBack;
+    }
 
+    // Инициализация драйвера
     public RegistrationPage(WebDriver driver) {
         this.driver = driver;
     }
@@ -43,24 +48,24 @@ public class RegistrationPage {
 
     // Заполнение формы регистрации
     public void inputRegistrationForm(String name, String email, String password) {
-        fillField(InputName, name);
-        fillField(InputEmail, email);
-        fillField(InputButton, password);
+        fillField(inputName, name);
+        fillField(inputEmail, email);
+        fillField(inputPassword, password);
     }
 
     // Регистрация нового пользователя
     public void register(String name, String email, String password) {
         inputRegistrationForm(name, email, password);
-        click(RegisterButton);
+        click(registerButton);
     }
 
     // Получение текста ошибки для поля Пароль
     public String getPasswordErrorMessage() {
-        return driver.findElement(ErrorPassword).getText();
+        return driver.findElement(errorPassword).getText();
     }
 
     // Переход по ссылке Войти
     public void clickAlreadyRegisteredLink() {
-        click(LoginLinkBack);
+        click(loginLinkBack);
     }
 }

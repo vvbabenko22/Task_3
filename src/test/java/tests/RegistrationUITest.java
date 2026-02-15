@@ -1,15 +1,18 @@
+package tests;
+
+import com.github.javafaker.Faker;
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 import io.qameta.allure.junit5.AllureJunit5;
-import com.github.javafaker.Faker;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import pages.AuthorizationPage;
-import pages.MainPage;
-import pages.RegistrationPage;
+import tests.pages.AuthorizationPage;
+import tests.pages.MainPage;
+import tests.pages.RegistrationPage;
 import utils.BrowserType;
 import utils.DriverManager;
 import utils.TestConfiguration;
+
 import static config.RestConfig.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -109,7 +112,8 @@ public class RegistrationUITest {
     private void sleep(long millis) {
         try {
             Thread.sleep(millis);
-        } catch (InterruptedException ignored) {}
+        } catch (InterruptedException ignored) {
+        }
     }
 
     // Вспомогательный метод для настройки типа браузера
@@ -122,7 +126,8 @@ public class RegistrationUITest {
     @DisplayName("Тесты для Chrome")
     class ChromeTests {
 
-        public ChromeTests() {configureBrowserType(BrowserType.CHROME);
+        public ChromeTests() {
+            configureBrowserType(BrowserType.CHROME);
         }
 
         // Тест регистрации в Chrome
